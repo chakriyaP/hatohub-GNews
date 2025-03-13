@@ -1,130 +1,140 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import { useEffect, useState } from "react";
+import { Layout, Divider, Form, Space, Skeleton, ConfigProvider } from "antd";
+import { fetchNews, Article } from "./services/api";
+import AppHeader from "../src/components/AppHeader";
+import FilterBar from "../src/components/FilterBar";
+import NewsCard from "../src/components/NewsList";
+import PaginationControls from "../src/components/PaginationControls";
+import { filterEmptyValueFromObject } from "./utils/general";
+import dayjs from "dayjs";
+import { DarkModeProvider, useDarkMode } from "./context/DarkModeContext";
 import "./App.css";
-import Calendar from "./components/calendar";
-import {
-  Avatar,
-  Button,
-  Card,
-  Col,
-  Dropdown,
-  Input,
-  Layout,
-  List,
-  Menu,
-  Row,
-  Space,
-} from "antd";
-import Sider from "antd/es/layout/Sider";
-import { Content, Footer, Header } from "antd/es/layout/layout";
-import LanguageSwitcher from "./components/languageSwitcher";
-import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
+import { LanguageKey } from "./components/LanguageSwitcher/type";
+
+const { Content } = Layout;
+
+type NewsSearchParams = {
+  searchQuery: string;
+  category: string | null;
+  dateRange: [string, string] | null;
+  sortBy: "asc" | "desc";
+};
 
 function App() {
-  const [language, setLanguage] = useState<"en" | "zh">("en");
-  const handleLanguageChange = (newLanguage: "en" | "zh") => {
-    setLanguage(newLanguage);
-    console.log("Language selected:", newLanguage);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6;
+  const [newsData, setNewsData] = useState<Article[]>([]);
+  const [language, setLanguage] = useState<LanguageKey>("en");
+  const [loading, setLoading] = useState(false);
+  const { darkMode } = useDarkMode();
+
+  const [form] = Form.useForm();
+
+  const handleFormSubmit = async (values: NewsSearchParams) => {
+    setLoading(true);
+    const formValue = filterEmptyValueFromObject(values) as NewsSearchParams;
+
+    const formattedFrom = formValue.dateRange?.[0]
+      ? dayjs(formValue.dateRange[0]).format("YYYY-MM-DDTHH:mm:ss[Z]")
+      : undefined;
+    const formattedTo = formValue.dateRange?.[1]
+      ? dayjs(formValue.dateRange[1]).format("YYYY-MM-DDTHH:mm:ss[Z]")
+      : undefined;
+
+    try {
+      const news = await fetchNews({
+        searchQuery: formValue?.searchQuery,
+        category: formValue?.category,
+        from: formattedFrom,
+        to: formattedTo,
+        sortBy: formValue.sortBy,
+        languageKey: language,
+      });
+
+      const sortedNews = news.sort((a, b) => {
+        const dateA = new Date(a.publishedAt).getTime();
+        const dateB = new Date(b.publishedAt).getTime();
+        return formValue.sortBy === "asc" ? dateA - dateB : dateB - dateA;
+      });
+
+      setNewsData(sortedNews);
+      form.setFieldsValue(values);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const data = Array.from({ length: 23 }).map((_, i) => ({
-    href: "https://ant.design",
-    title: `ant design part ${i}`,
-    avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
-    description:
-      "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-    content:
-      "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
-  }));
-  const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
-  return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Header style={{ background: "#fff", padding: "0 20px" }}>
-        <Row justify="space-between" align="middle">
-          <Col
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src={logo}
-              alt="Logo"
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-                width: "auto",
-                maxHeight: 20,
-              }}
-            />
-          </Col>
-          <Col>
-            <LanguageSwitcher onChange={handleLanguageChange} />
-          </Col>
-        </Row>
-      </Header>
+  // Call the API on component mount
+  useEffect(() => {
+    const initialValues: NewsSearchParams = {
+      searchQuery: "",
+      category: null,
+      dateRange: null,
+      sortBy: "desc",
+    };
 
-      {/* Main Content */}
-      <Content style={{ margin: "24px 16px 0" }}>
-        <List
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
-            pageSize: 3,
-          }}
-          dataSource={data}
-          footer={
-            <div>
-              <b>ant design</b> footer part
-            </div>
-          }
-          renderItem={(item) => (
-            <List.Item
-              key={item.title}
-              actions={[
-                <IconText
-                  icon={StarOutlined}
-                  text="156"
-                  key="list-vertical-star-o"
-                />,
-                <IconText
-                  icon={LikeOutlined}
-                  text="156"
-                  key="list-vertical-like-o"
-                />,
-                <IconText
-                  icon={MessageOutlined}
-                  text="2"
-                  key="list-vertical-message"
-                />,
-              ]}
-              extra={
-                <img
-                  width={272}
-                  alt="logo"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                />
-              }
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
-              />
-              {item.content}
-            </List.Item>
-          )}
-        />
-      </Content>
-    </Layout>
+    handleFormSubmit(initialValues);
+  }, []);
+
+  // Call the API on language change
+  useEffect(() => {
+    const formValue = form.getFieldsValue() as NewsSearchParams;
+    handleFormSubmit(formValue);
+  }, [language, form]);
+
+  // Pagination logic
+  const currentData = newsData.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "rgb(93 101 209 / var(--tw-text-opacity))", // Your custom primary color
+        },
+      }}
+    >
+      <Layout
+        style={{
+          minHeight: "100vh",
+          background: darkMode
+            ? 'url("https://4kwallpapers.com/images/wallpapers/macos-big-sur-apple-layers-fluidic-colorful-dark-wwdc-2020-3840x2160-1432.jpg")'
+            : "#eee",
+        }}
+        className="body"
+      >
+        <AppHeader onLanguageChange={setLanguage}></AppHeader>
+        <Content style={{ margin: "16px" }}>
+          <FilterBar
+            categories={[
+              "general",
+              "world",
+              "business",
+              "technology",
+              "entertainment",
+              "sports",
+              "science",
+              "health",
+            ]}
+            form={form}
+            onFinish={handleFormSubmit}
+          />
+          <NewsCard articles={currentData} loading={loading} />
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <PaginationControls
+              currentPage={currentPage}
+              pageSize={pageSize}
+              total={newsData.length}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        </Content>
+      </Layout>
+    </ConfigProvider>
   );
 }
 

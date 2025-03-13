@@ -1,0 +1,68 @@
+const path = require('path');
+
+module.exports = {
+  // Entry point for your application
+  entry: './src/index.tsx',
+
+  // Output configuration
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/',
+  },
+
+  // Resolve file extensions
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
+
+  // Module rules for handling different file types
+  module: {
+    rules: [
+      // Rule for TypeScript files
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      // Rule for JavaScript files (optional, if you have JS files)
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+          },
+        },
+      },
+      // Rule for CSS files
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      // Rule for assets (e.g., images, fonts)
+      {
+        test: /\.(png|jpe?g|gif|svg|woff|woff2|eot|ttf)$/i,
+        type: 'asset/resource',
+      },
+    ],
+  },
+
+  // Development server configuration
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: 3000,
+    hot: true,
+    historyApiFallback: true, // Required for React Router
+  },
+
+  // Mode (development or production)
+  mode: 'development',
+
+  // Source maps for debugging
+  devtool: 'inline-source-map',
+};
