@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Layout, Divider, Form, Space, Skeleton, ConfigProvider } from "antd";
 import { fetchNews, Article } from "./services/api";
-import AppHeader from "../src/components/AppHeader";
-import FilterBar from "../src/components/FilterBar";
-import NewsCard from "../src/components/NewsList";
+import AppHeader from "./components/appHeader";
+import FilterBar from "./components/filterBar";
+import NewsCard from "./components/newsList";
 import PaginationControls from "../src/components/PaginationControls";
 import { filterEmptyValueFromObject } from "./utils/general";
 import dayjs from "dayjs";
 import { DarkModeProvider, useDarkMode } from "./context/DarkModeContext";
 import "./App.css";
-import { LanguageKey } from "./components/LanguageSwitcher/type";
+import { LanguageKey } from "./components/languageSwitcher/type";
 
 const { Content } = Layout;
 

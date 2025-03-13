@@ -2,10 +2,10 @@ import React from "react";
 import { Row, Col, Flex } from "antd";
 import logoLight from "../../assets/logo-light.svg";
 import logoDark from "../../assets/logo-dark.svg";
-import LanguageSwitcher from "../../components/LanguageSwitcher";
+import LanguageSwitcher from "../languageSwitcher";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { StyledHeader, Switch } from "./style";
-import { LanguageKey } from "../LanguageSwitcher/type";
+import { LanguageKey } from "../languageSwitcher/type";
 
 const AppHeader: React.FC<{
   onLanguageChange: (lang: LanguageKey) => void;
