@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col, Flex } from "antd";
 import logoLight from "../../assets/logo-light.svg";
 import logoDark from "../../assets/logo-dark.svg";
-
 import LanguageSwitcher from "../LanguageSwitcher";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { StyledHeader, Switch } from "./style";
