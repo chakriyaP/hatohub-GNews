@@ -1,4 +1,4 @@
-# G-News Webpage
+# G-News Web
 
 Welcome to the News Search Webpage! This project is built with **ReactJS (Typescript)**, and it allows users to search for news articles, filter by categories, dates, and more. It integrates with the **GNews API** to fetch news data, and offers features like pagination, multi-language support (English and Chinese), dark mode, and more.
 
