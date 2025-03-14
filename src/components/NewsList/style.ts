@@ -8,6 +8,7 @@ export const StyledCard = styled(Card)<{ $darkMode: boolean }>`
   backdrop-filter: blur(10px);
   position: relative;
   border: none;
+
   p,
   span {
     color: ${(props) => (props.$darkMode ? "#fff" : "#111")};

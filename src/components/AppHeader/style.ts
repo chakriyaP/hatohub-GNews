@@ -7,6 +7,7 @@ export const StyledHeader = styled(Layout.Header)<{ $darkMode: boolean }>`
   position: ${(props) => (props.$darkMode ? "none" : "sticky")};
   top: 0;
   z-index: 1000;
+
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   img {

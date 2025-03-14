@@ -5,7 +5,7 @@ import { Select } from "./style";
 import { useDarkMode } from "../../context/DarkModeContext";
 
 const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ onChange }) => {
-  const { i18n } = useTranslation(); // Access i18n instance
+  const { i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageKey>(
     i18n.language as LanguageKey
   );

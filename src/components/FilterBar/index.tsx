@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { FilterBarProps } from "./type";
 import { StyledForm, StyledTitle, Wrapper, Divider } from "./style";
-import { StyledHeader } from "../appHeader/style";
 
 const { RangePicker } = DatePicker;
 
