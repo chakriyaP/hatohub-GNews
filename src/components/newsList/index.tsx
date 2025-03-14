@@ -1,4 +1,4 @@
-import { Row, Col, Skeleton, Tag } from "antd";
+import { Row, Col, Skeleton, Tag, Empty } from "antd";
 import dayjs from "dayjs";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { StyledCard, Image } from "./style";
@@ -55,6 +55,16 @@ const NewsCard: React.FC<{ article: Article }> = ({ article }) => {
 
 const NewsList: React.FC<NewsListProps> = ({ articles, loading }) => {
   if (loading) return <LoadingSkeleton />;
+
+  if (!articles || articles.length === 0) {
+    return (
+      <Row justify="center" align="middle" style={{ height: "50vh" }}>
+        <Col>
+          <Empty description="No news available" />
+        </Col>
+      </Row>
+    );
+  }
 
   return (
     <Row gutter={[32, 32]}>

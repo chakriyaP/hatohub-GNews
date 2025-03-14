@@ -9,6 +9,9 @@ export const StyledCard = styled(Card)<{ $darkMode: boolean }>`
   position: relative;
   border: none;
 
+  * {
+    white-space: normal;
+  }
   p,
   span {
     color: ${(props) => (props.$darkMode ? "#fff" : "#111")};

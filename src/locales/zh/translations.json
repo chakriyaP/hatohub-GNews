@@ -1,5 +1,10 @@
 {
   "news": "新闻",
-  "filter": "过滤",
-  "sortBy": "排序方式: 发布日期"
+  "filter": "筛选",
+  "sortBy": "排序方式: 最新优先",
+  "sortByOldest": "排序方式: 最早优先",
+  "search": "搜索",
+  "selectCategory": "选择类别",
+  "startDate": "开始日期",
+  "endDate": "结束日期"
 }

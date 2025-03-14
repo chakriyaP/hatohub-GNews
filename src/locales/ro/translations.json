@@ -1,5 +1,10 @@
 {
   "news": "Știri",
   "filter": "Filtru",
-  "sortBy": "Sortează după: Data publicării"
+  "sortBy": "Sortare după: Cele mai noi",
+  "sortByOldest": "Sortare după: Cele mai vechi",
+  "search": "Căutare",
+  "selectCategory": "Selectați categoria",
+  "startDate": "Data de început",
+  "endDate": "Data de sfârșit"
 }

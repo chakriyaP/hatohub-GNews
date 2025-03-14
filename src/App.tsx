@@ -4,7 +4,7 @@ import { fetchNews, Article } from "./services/api";
 import AppHeader from "./components/appHeader";
 import FilterBar from "./components/filterBar";
 import NewsCard from "./components/newsList";
-import PaginationControls from "../src/components/PaginationControls";
+import PaginationControls from "../src/components/paginationControls";
 import { filterEmptyValueFromObject } from "./utils/general";
 import dayjs from "dayjs";
 import { useDarkMode } from "./context/DarkModeContext";
@@ -41,6 +41,7 @@ function App() {
     const formattedTo = formValue.dateRange?.[1]
       ? dayjs(formValue.dateRange[1]).format("YYYY-MM-DDTHH:mm:ss[Z]")
       : undefined;
+    console.log("formValue.sortBy:", formValue);
 
     try {
       const news = await fetchNews({
@@ -95,7 +96,7 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "rgb(93 101 209 / var(--tw-text-opacity))", // Your custom primary color
+          colorPrimary: "#5d65d1", // Your custom primary color
         },
       }}
     >

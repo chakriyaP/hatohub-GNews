@@ -1,5 +1,10 @@
 {
-  "news": "Nyheter",
-  "filter": "Filter",
-  "sortBy": "Sortera efter: Publiceringsdatum"
+  "news": "செய்திகள்",
+  "filter": "வடிகட்டி",
+  "sortBy": "வரிசைப்படுத்து: புதியவை முதலில்",
+  "sortByOldest": "வரிசைப்படுத்து: பழையவை முதலில்",
+  "search": "தேடு",
+  "selectCategory": "வகையைத் தேர்ந்தெடு",
+  "startDate": "தொடக்க தேதி",
+  "endDate": "முடிவு தேதி"
 }

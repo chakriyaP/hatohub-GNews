@@ -1,5 +1,10 @@
 {
   "news": "Actualités",
-  "filter": "Filtre",
-  "sortBy": "Trier par: Date de publication"
+  "filter": "Filtrer",
+  "sortBy": "Trié par : Plus récent d'abord",
+  "sortByOldest": "Trié par : Plus ancien d'abord",
+  "search": "Recherche",
+  "selectCategory": "Sélectionner une catégorie",
+  "startDate": "Date de début",
+  "endDate": "Date de fin"
 }
