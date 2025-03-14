@@ -1,4 +1,4 @@
-import { Article } from "../../services/api";
+import { Article } from "../../types/news";
 
 export interface NewsListProps {
   articles: Article[];

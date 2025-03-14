@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Row, Col, Skeleton, Tag, Empty } from "antd";
 import dayjs from "dayjs";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { StyledCard, Image } from "./style";
 import { NewsListProps } from "./type";
-import { Article } from "../../services/api";
+import { Article } from "../../types/news";
+import loadingFailed from "../../assets/loading-failed.png";
 
 const LoadingSkeleton: React.FC = () => (
   <Row gutter={[16, 16]}>
@@ -21,12 +23,26 @@ const LoadingSkeleton: React.FC = () => (
 const NewsCard: React.FC<{ article: Article }> = ({ article }) => {
   const { darkMode } = useDarkMode();
 
+  const [hasError, setHasError] = useState(false);
+
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    setHasError(true);
+  };
+
   return (
     <Col xs={24} md={12}>
       <a href={article.url} target="_blank" rel="noopener noreferrer">
         <StyledCard
           $darkMode={darkMode}
-          cover={<Image alt={article.title} src={article.image} />}
+          cover={
+            <Image
+              alt={article.title}
+              src={hasError ? loadingFailed : article.image}
+              onError={handleImageError}
+            />
+          }
         >
           <p>{dayjs(article.publishedAt).format("MMM DD, YYYY hh:mm A")}</p>
           <StyledCard.Meta

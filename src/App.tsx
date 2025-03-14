@@ -1,74 +1,31 @@
 import { useEffect, useState } from "react";
 import { Layout, Form, ConfigProvider } from "antd";
-import { fetchNews, Article } from "./services/api";
+import { useNewsFetch } from "./hooks/useNewsFetch";
+import { useLayoutSettings } from "./hooks/useLayoutSettings";
 import AppHeader from "./components/appHeader";
 import FilterBar from "./components/filterBar";
 import NewsCard from "./components/newsList";
 import PaginationControls from "../src/components/paginationControls";
-import { filterEmptyValueFromObject } from "./utils/general";
-import dayjs from "dayjs";
-import { useDarkMode } from "./context/DarkModeContext";
-import "./App.css";
 import { LanguageKey } from "./components/languageSwitcher/type";
+import { NewsSearchParams } from "./types/news";
+import { newsCategories } from "./constants/categories";
 
 const { Content } = Layout;
-
-type NewsSearchParams = {
-  searchQuery: string;
-  category: string | null;
-  dateRange: [string, string] | null;
-  sortBy: "asc" | "desc";
-};
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
-  const [newsData, setNewsData] = useState<Article[]>([]);
   const [language, setLanguage] = useState<LanguageKey>("en");
-  const [loading, setLoading] = useState(false);
-
-  const { darkMode } = useDarkMode();
-
   const [form] = Form.useForm();
 
+  const { newsData, loading, fetchArticles } = useNewsFetch(language);
+  const { layoutStyle, themeConfig } = useLayoutSettings();
+
   const handleFormSubmit = async (values: NewsSearchParams) => {
-    setLoading(true);
-    const formValue = filterEmptyValueFromObject(values) as NewsSearchParams;
-
-    const formattedFrom = formValue.dateRange?.[0]
-      ? dayjs(formValue.dateRange[0]).format("YYYY-MM-DDTHH:mm:ss[Z]")
-      : undefined;
-    const formattedTo = formValue.dateRange?.[1]
-      ? dayjs(formValue.dateRange[1]).format("YYYY-MM-DDTHH:mm:ss[Z]")
-      : undefined;
-    console.log("formValue.sortBy:", formValue);
-
-    try {
-      const news = await fetchNews({
-        searchQuery: formValue?.searchQuery,
-        category: formValue?.category,
-        from: formattedFrom,
-        to: formattedTo,
-        sortBy: formValue.sortBy,
-        languageKey: language,
-      });
-
-      const sortedNews = news.sort((a, b) => {
-        const dateA = new Date(a.publishedAt).getTime();
-        const dateB = new Date(b.publishedAt).getTime();
-        return formValue.sortBy === "asc" ? dateA - dateB : dateB - dateA;
-      });
-
-      setNewsData(sortedNews);
-      form.setFieldsValue(values);
-    } catch (error) {
-      console.error("Error fetching news:", error);
-    } finally {
-      setLoading(false);
-    }
+    fetchArticles(values);
+    form.setFieldsValue(values);
   };
 
-  // Call the API on component mount
   useEffect(() => {
     const initialValues: NewsSearchParams = {
       searchQuery: "",
@@ -78,50 +35,27 @@ function App() {
     };
 
     handleFormSubmit(initialValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Call the API on language change
   useEffect(() => {
     const formValue = form.getFieldsValue() as NewsSearchParams;
     handleFormSubmit(formValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, form]);
 
-  // Pagination logic
   const currentData = newsData.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#5d65d1", // Your custom primary color
-        },
-      }}
-    >
-      <Layout
-        style={{
-          minHeight: "100vh",
-          background: darkMode
-            ? 'url("https://4kwallpapers.com/images/wallpapers/macos-big-sur-apple-layers-fluidic-colorful-dark-wwdc-2020-3840x2160-1432.jpg")'
-            : "#eee",
-        }}
-        className="body"
-      >
+    <ConfigProvider theme={themeConfig}>
+      <Layout style={layoutStyle} className="body">
         <AppHeader onLanguageChange={setLanguage}></AppHeader>
         <Content style={{ margin: "16px" }}>
           <FilterBar
-            categories={[
-              "general",
-              "world",
-              "business",
-              "technology",
-              "entertainment",
-              "sports",
-              "science",
-              "health",
-            ]}
+            categories={newsCategories}
             form={form}
             onFinish={handleFormSubmit}
           />

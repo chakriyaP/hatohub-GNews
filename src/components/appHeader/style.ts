@@ -16,6 +16,11 @@ export const StyledHeader = styled(Layout.Header)<{ $darkMode: boolean }>`
   }
 `;
 
+/* 
+  CSS Style originally created by Joneeel 
+  Source: https://codepen.io/Joneeel/pen/vYrjRWz 
+  Modified by [Your Name] 
+*/
 export const Switch = styled.input`
   position: relative;
   width: 65px;

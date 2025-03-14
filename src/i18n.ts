@@ -1,7 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-// Import translations for all languages
 import enTranslation from "../src/locales/en/translations.json";
 import zhTranslation from "../src/locales/zh/translations.json";
 import arTranslation from "../src/locales/ar/translations.json";
@@ -96,21 +95,13 @@ const resources = {
 };
 
 // Initialize i18n
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: "en", // Default language
-    fallbackLng: "en", // Fallback language
-    interpolation: {
-      escapeValue: false, // React already escapes values
-    },
-  })
-  .then(() => {
-    console.log("i18next initialized successfully");
-  })
-  .catch((error) => {
-    console.error("i18next initialization failed:", error);
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en",
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;
