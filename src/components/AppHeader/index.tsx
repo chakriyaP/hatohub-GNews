@@ -16,11 +16,7 @@ const AppHeader: React.FC<{
     <StyledHeader $darkMode={darkMode}>
       <Row justify="space-between" align="middle">
         <Col>
-          <img
-            src={darkMode ? logoDark : logoLight}
-            alt="Logo"
-            // style={{ maxHeight: 20 }}
-          />
+          <img src={darkMode ? logoDark : logoLight} alt="Logo" />
         </Col>
         <Col>
           <Flex justify="space-between" align="center" gap={10}>

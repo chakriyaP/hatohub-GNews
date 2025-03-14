@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, Divider, Form, Space, Skeleton, ConfigProvider } from "antd";
+import { Layout, Form, ConfigProvider } from "antd";
 import { fetchNews, Article } from "./services/api";
 import AppHeader from "./components/appHeader";
 import FilterBar from "./components/filterBar";
@@ -7,7 +7,7 @@ import NewsCard from "./components/newsList";
 import PaginationControls from "../src/components/PaginationControls";
 import { filterEmptyValueFromObject } from "./utils/general";
 import dayjs from "dayjs";
-import { DarkModeProvider, useDarkMode } from "./context/DarkModeContext";
+import { useDarkMode } from "./context/DarkModeContext";
 import "./App.css";
 import { LanguageKey } from "./components/languageSwitcher/type";
 
@@ -26,6 +26,7 @@ function App() {
   const [newsData, setNewsData] = useState<Article[]>([]);
   const [language, setLanguage] = useState<LanguageKey>("en");
   const [loading, setLoading] = useState(false);
+
   const { darkMode } = useDarkMode();
 
   const [form] = Form.useForm();
