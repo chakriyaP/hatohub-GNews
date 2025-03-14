@@ -1,4 +1,4 @@
-![Screenshot 2568-03-14 at 19 44 24](https://github.com/user-attachments/assets/87c5846a-38bd-49b3-96a6-173b715e8e4d)# G-News Webpage
+# G-News Webpage
 
 Welcome to the News Search Webpage! This project is built with **ReactJS (Typescript)**, and it allows users to search for news articles, filter by categories, dates, and more. It integrates with the **GNews API** to fetch news data, and offers features like pagination, multi-language support (English and Chinese), dark mode, and more.
 
@@ -92,5 +92,5 @@ Here’s a list of features and functionalities implemented in the project:
 - Deployed to Vercel: [GNews Webpage](https://g-news-one.vercel.app/)
 
 ## Contact
-For any questions or issues, feel free to reach out to me at [kimchakriya91@gmail.com].
+For any questions or issues, feel free to reach out to me at kimchakriya91@gmail.com.
 
